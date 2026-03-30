@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "steg-analyzer"
-version = "1.0.0"
+version = "1.0.1"
 description = "All-in-One Steganography Analysis & Extraction Tool"
 authors = [{ name = "Steg Analyzer Contributors" }]
 license = { text = "MIT" }
