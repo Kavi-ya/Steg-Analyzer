@@ -2,9 +2,9 @@
 
 **All-in-One Steganography Analysis & Extraction Tool**
 
-[![CI](https://github.com/your-org/steg-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/steg-analyzer/actions)
-[![PyPI](https://img.shields.io/pypi/v/steg_analyzer)](https://pypi.org/project/steg_analyzer/)
-[![Python](https://img.shields.io/pypi/pyversions/steg_analyzer)](https://pypi.org/project/steg_analyzer/)
+[![CI](https://github.com/kavi-ya/steg-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/kavi-ya/steg-analyzer/actions)
+[![PyPI](https://img.shields.io/pypi/v/steg-analyzer)](https://pypi.org/project/steg-analyzer/)
+[![Python](https://img.shields.io/pypi/pyversions/steg-analyzer)](https://pypi.org/project/steg-analyzer/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Steg Analyzer is a comprehensive steganography toolkit for CTF challenges, digital forensics, and security research. It bundles every major analysis technique into a single, clean CLI.
