@@ -41,7 +41,7 @@ pip install "steg-analyzer[full]"
 
 ### From source
 ```bash
-git clone https://github.com/your-org/steg-analyzer.git
+git clone https://github.com/Kavi-ya/steg-analyzer.git
 cd steg_analyzer
 pip install -e ".[full]"
 ```
