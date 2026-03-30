@@ -27,7 +27,7 @@ Examples:
   steg-analyzer extract image.jpg --method steghide --password mypass
   steg-analyzer crack image.jpg --wordlist rockyou.txt
   steg-analyzer visual image.png --output ./results/
-        """
+        """,
     )
 
     parser.add_argument("--version", action="version", version=f"Steg Analyzer {__version__}")
@@ -51,29 +51,43 @@ Examples:
     analyze.add_argument(
         "--output", "-o", default="./steg-analyzer-output", help="Output directory"
     )
-    analyze.add_argument("--format", choices=["text", "json", "html"], default="text",
-                         help="Report format")
+    analyze.add_argument(
+        "--format", choices=["text", "json", "html"], default="text", help="Report format"
+    )
 
     # ── extract ──────────────────────────────────────────────────────────────
     extract = subparsers.add_parser("extract", help="Extract hidden data using a specific method")
     extract.add_argument("image", help="Path to image file")
-    extract.add_argument("--method", "-m",
-                         choices=["lsb", "steghide", "outguess", "jsteg", "dct", "all"],
-                         default="lsb", help="Extraction method")
+    extract.add_argument(
+        "--method",
+        "-m",
+        choices=["lsb", "steghide", "outguess", "jsteg", "dct", "all"],
+        default="lsb",
+        help="Extraction method",
+    )
     extract.add_argument("--password", "-p", default="", help="Password / passphrase")
-    extract.add_argument("--channel", "-c", choices=["r", "g", "b", "a", "rgb", "all"],
-                         default="rgb", help="Color channel(s)")
-    extract.add_argument("--bit", type=int, choices=range(8), default=0,
-                         help="Bit plane (0=LSB)")
-    extract.add_argument("--output", "-o", default="extracted.bin",
-                         help="Output file for extracted data")
+    extract.add_argument(
+        "--channel",
+        "-c",
+        choices=["r", "g", "b", "a", "rgb", "all"],
+        default="rgb",
+        help="Color channel(s)",
+    )
+    extract.add_argument("--bit", type=int, choices=range(8), default=0, help="Bit plane (0=LSB)")
+    extract.add_argument(
+        "--output", "-o", default="extracted.bin", help="Output file for extracted data"
+    )
 
     # ── crack ─────────────────────────────────────────────────────────────────
     crack = subparsers.add_parser("crack", help="Brute-force steghide passphrase")
     crack.add_argument("image", help="Path to image file")
     crack.add_argument("--wordlist", "-w", required=True, help="Path to wordlist file")
-    crack.add_argument("--method", choices=["steghide", "stegseek"], default="steghide",
-                       help="Tool to use for cracking")
+    crack.add_argument(
+        "--method",
+        choices=["steghide", "stegseek"],
+        default="steghide",
+        help="Tool to use for cracking",
+    )
     crack.add_argument("--output", "-o", default="cracked.bin", help="Output file on success")
     crack.add_argument("--threads", "-t", type=int, default=4, help="Number of threads")
 

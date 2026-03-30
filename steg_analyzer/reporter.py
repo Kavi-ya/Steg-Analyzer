@@ -74,14 +74,10 @@ class Reporter:
             if isinstance(data, dict):
                 for k, v in data.items():
                     css = ' class="flag"' if k == "flags" and v else ""
-                    val_html = (
-                        "<br>".join(str(x) for x in v)
-                        if isinstance(v, list)
-                        else str(v)
-                    )
+                    val_html = "<br>".join(str(x) for x in v) if isinstance(v, list) else str(v)
                     rows += f"<tr{css}><td>{k}</td><td>{val_html}</td></tr>\n"
 
-        generated = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
+        generated = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>

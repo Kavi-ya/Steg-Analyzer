@@ -50,14 +50,12 @@ def run(analyzer: StegAnalyzer, output_dir: Path, quality: int = 95) -> dict:
 
     for y in range(0, h - block_size, block_size):
         for x in range(0, w - block_size, block_size):
-            block_mean = float(gray_diff[y: y + block_size, x: x + block_size].mean())
+            block_mean = float(gray_diff[y : y + block_size, x : x + block_size].mean())
             suspicious.append((block_mean, x, y))
 
     suspicious.sort(reverse=True)
     top = suspicious[:5]
-    results["top_suspicious_regions"] = [
-        f"({x},{y}) score={s:.2f}" for s, x, y in top
-    ]
+    results["top_suspicious_regions"] = [f"({x},{y}) score={s:.2f}" for s, x, y in top]
 
     # Heuristic verdict
     if results["max_diff"] < 5:

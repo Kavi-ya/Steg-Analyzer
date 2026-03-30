@@ -17,9 +17,7 @@ def run(analyzer: StegAnalyzer) -> dict:
     try:
         import jpegio as jio  # type: ignore[import]
     except ImportError:
-        results["error"] = (
-            "jpegio not installed. Run: pip install jpegio"
-        )
+        results["error"] = "jpegio not installed. Run: pip install jpegio"
         return results
 
     try:
@@ -34,9 +32,7 @@ def run(analyzer: StegAnalyzer) -> dict:
     for idx, coef_array in enumerate(struct.coef_arrays):
         flat = coef_array.flatten()
         nonzero = int(np.count_nonzero(flat))
-        coef_info.append(
-            f"array[{idx}] shape={coef_array.shape} nonzero={nonzero}"
-        )
+        coef_info.append(f"array[{idx}] shape={coef_array.shape} nonzero={nonzero}")
 
         # JSteg: embed in LSB of non-zero, non-one AC coefficients
         for v in flat:

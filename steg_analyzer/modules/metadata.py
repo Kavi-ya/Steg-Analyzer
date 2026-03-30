@@ -31,6 +31,7 @@ def run(analyzer: StegAnalyzer) -> dict:
     # EXIF via Pillow
     try:
         from PIL.ExifTags import TAGS
+
         exif_raw = analyzer.pil_image._getexif()  # type: ignore[attr-defined]
         if exif_raw:
             exif: dict[str, str] = {}
@@ -50,17 +51,28 @@ def run(analyzer: StegAnalyzer) -> dict:
     # Try exiftool if installed
     try:
         import subprocess
+
         r = subprocess.run(
             ["exiftool", "-j", str(analyzer.path)],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
         )
         if r.returncode == 0:
             import json
+
             exif_data = json.loads(r.stdout)[0]
             # Filter out boring keys
-            skip = {"ExifToolVersion", "FileName", "Directory", "FileSize",
-                    "FileModifyDate", "FileAccessDate", "FileInodeChangeDate",
-                    "FilePermissions"}
+            skip = {
+                "ExifToolVersion",
+                "FileName",
+                "Directory",
+                "FileSize",
+                "FileModifyDate",
+                "FileAccessDate",
+                "FileInodeChangeDate",
+                "FilePermissions",
+            }
             for k, v in exif_data.items():
                 if k not in skip:
                     results[f"exiftool_{k}"] = str(v)[:200]
@@ -101,7 +113,7 @@ def _scan_jpeg_markers(data: bytes) -> dict:
         if i + 3 >= len(data):
             break
         length = (data[i + 2] << 8) | data[i + 3]
-        segment_data = data[i + 4: i + 2 + length]
+        segment_data = data[i + 4 : i + 2 + length]
 
         if marker == 0xFE:  # COM – JPEG comment
             try:

@@ -32,7 +32,9 @@ def _run_stegseek(image_path: Path, wordlist_path: Path, output_path: Path) -> s
     try:
         r = subprocess.run(
             ["stegseek", str(image_path), str(wordlist_path), str(output_path)],
-            capture_output=True, text=True, timeout=300,
+            capture_output=True,
+            text=True,
+            timeout=300,
         )
         # Parse password from stegseek output
         for line in r.stdout.splitlines() + r.stderr.splitlines():
@@ -75,13 +77,19 @@ def _run_steghide_brute(
             try:
                 r = subprocess.run(
                     [
-                        "steghide", "extract",
-                        "-sf", str(image_path),
-                        "-p", pwd,
-                        "-xf", str(output_path),
+                        "steghide",
+                        "extract",
+                        "-sf",
+                        str(image_path),
+                        "-p",
+                        pwd,
+                        "-xf",
+                        str(output_path),
                         "-f",
                     ],
-                    capture_output=True, text=True, timeout=10,
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
                 )
                 with lock:
                     checked[0] += 1

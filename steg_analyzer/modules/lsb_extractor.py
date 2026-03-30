@@ -10,7 +10,10 @@ from ..analyzer import StegAnalyzer
 from ..utils import detect_file_type, print_result
 
 CHANNEL_MAP = {
-    "r": ["r"], "g": ["g"], "b": ["b"], "a": ["a"],
+    "r": ["r"],
+    "g": ["g"],
+    "b": ["b"],
+    "a": ["a"],
     "rgb": ["r", "g", "b"],
     "all": ["r", "g", "b", "a"],
 }

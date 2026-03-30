@@ -78,8 +78,9 @@ def run(
         gray = np.array(Image.fromarray(arr).convert("L"), dtype=np.float64)
         fft2 = np.fft.fftshift(np.fft.fft2(gray))
         magnitude = 20 * np.log10(np.abs(fft2) + 1)
-        mag_norm = ((magnitude - magnitude.min()) /
-                    (magnitude.max() - magnitude.min()) * 255).astype(np.uint8)
+        mag_norm = (
+            (magnitude - magnitude.min()) / (magnitude.max() - magnitude.min()) * 255
+        ).astype(np.uint8)
         path = output_dir / "fft_spectrum.png"
         Image.fromarray(mag_norm, "L").save(path)
         saved.append(str(path))
@@ -91,15 +92,17 @@ def run(
         diff_dir.mkdir(exist_ok=True)
         r, g, b = arr[:, :, 0].astype(int), arr[:, :, 1].astype(int), arr[:, :, 2].astype(int)
 
-        for (c1, c2, name) in [(r, g, "R-G"), (g, b, "G-B"), (r, b, "R-B")]:
+        for c1, c2, name in [(r, g, "R-G"), (g, b, "G-B"), (r, b, "R-B")]:
             amp = np.clip(np.abs(c1 - c2) * 5, 0, 255).astype(np.uint8)
             path = diff_dir / f"diff_{name.replace('-','_')}.png"
             Image.fromarray(amp, "L").save(path)
             saved.append(str(path))
 
         # XOR channels
-        for (c1, c2, name) in [(arr[:, :, 0], arr[:, :, 1], "R_XOR_G"),
-                                 (arr[:, :, 1], arr[:, :, 2], "G_XOR_B")]:
+        for c1, c2, name in [
+            (arr[:, :, 0], arr[:, :, 1], "R_XOR_G"),
+            (arr[:, :, 1], arr[:, :, 2], "G_XOR_B"),
+        ]:
             xor = c1.astype(np.uint8) ^ c2.astype(np.uint8)
             path = diff_dir / f"{name}.png"
             Image.fromarray(xor, "L").save(path)

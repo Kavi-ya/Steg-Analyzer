@@ -7,15 +7,16 @@ import sys
 
 # ── ANSI colour helpers ───────────────────────────────────────────────────────
 
-_RESET  = "\033[0m"
-_BOLD   = "\033[1m"
-_DIM    = "\033[2m"
-_RED    = "\033[91m"
-_GREEN  = "\033[92m"
+_RESET = "\033[0m"
+_BOLD = "\033[1m"
+_DIM = "\033[2m"
+_RED = "\033[91m"
+_GREEN = "\033[92m"
 _YELLOW = "\033[93m"
-_CYAN   = "\033[96m"
-_WHITE  = "\033[97m"
+_CYAN = "\033[96m"
+_WHITE = "\033[97m"
 _MAGENTA = "\033[95m"
+
 
 def _c(text: str, *codes: str) -> str:
     if not sys.stdout.isatty():
@@ -34,6 +35,7 @@ def print_banner():
     """
     tag = "All-in-One Steganography Analysis Tool"
     from steg_analyzer import __version__
+
     print(_c(banner.rstrip(), _CYAN, _BOLD))
     print(_c(f"  {tag}   v{__version__}", _DIM))
     print(_c("  github.com/your-org/steg-analyzer", _DIM))
@@ -75,29 +77,29 @@ def print_found(label: str, value: str):
 # ── byte / file helpers ───────────────────────────────────────────────────────
 
 FILE_SIGNATURES: dict[bytes, str] = {
-    b"\xff\xd8\xff":   "JPEG image",
-    b"\x89PNG\r\n":    "PNG image",
-    b"GIF8":           "GIF image",
-    b"BM":             "BMP image",
-    b"PK\x03\x04":    "ZIP archive",
-    b"PK\x05\x06":    "ZIP archive (empty)",
-    b"\x1f\x8b":       "GZIP archive",
-    b"Rar!":           "RAR archive",
-    b"7z\xbc\xaf":    "7-Zip archive",
+    b"\xff\xd8\xff": "JPEG image",
+    b"\x89PNG\r\n": "PNG image",
+    b"GIF8": "GIF image",
+    b"BM": "BMP image",
+    b"PK\x03\x04": "ZIP archive",
+    b"PK\x05\x06": "ZIP archive (empty)",
+    b"\x1f\x8b": "GZIP archive",
+    b"Rar!": "RAR archive",
+    b"7z\xbc\xaf": "7-Zip archive",
     b"\x00\x00\x00\x18ftypmp4": "MP4 video",
-    b"%PDF":           "PDF document",
-    b"ID3":            "MP3 audio",
-    b"OggS":           "OGG audio",
-    b"fLaC":           "FLAC audio",
-    b"RIFF":           "RIFF (WAV/AVI)",
-    b"MZ":             "Windows PE executable",
-    b"\x7fELF":        "ELF executable",
+    b"%PDF": "PDF document",
+    b"ID3": "MP3 audio",
+    b"OggS": "OGG audio",
+    b"fLaC": "FLAC audio",
+    b"RIFF": "RIFF (WAV/AVI)",
+    b"MZ": "Windows PE executable",
+    b"\x7fELF": "ELF executable",
 }
 
 
 def detect_file_type(data: bytes) -> str | None:
     for sig, name in FILE_SIGNATURES.items():
-        if data[:len(sig)] == sig:
+        if data[: len(sig)] == sig:
             return name
     return None
 

@@ -19,7 +19,7 @@ def run(analyzer: StegAnalyzer) -> dict:
     if analyzer.is_jpeg:
         jpeg_end = data.rfind(b"\xff\xd9")
         if jpeg_end != -1 and jpeg_end < len(data) - 2:
-            appended = data[jpeg_end + 2:]
+            appended = data[jpeg_end + 2 :]
             results["appended_bytes"] = len(appended)
             results["appended_hex_preview"] = appended[:64].hex()
             ft = detect_file_type(appended)
@@ -52,6 +52,7 @@ def run(analyzer: StegAnalyzer) -> dict:
     b64_matches = b64_pattern.findall(data)
     if b64_matches:
         import base64
+
         decoded_files: list[str] = []
         for m in b64_matches[:20]:
             try:

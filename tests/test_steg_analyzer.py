@@ -11,8 +11,8 @@ import pytest
 from pathlib import Path
 from PIL import Image
 
-
 # ── helpers ───────────────────────────────────────────────────────────────────
+
 
 def _make_png(width=64, height=64, mode="RGB") -> Path:
     """Create a solid-colour PNG in /tmp and return its path."""
@@ -46,9 +46,11 @@ def _make_lsb_image(message: bytes, width=256, height=256) -> Path:
 
 # ── StegAnalyzer ──────────────────────────────────────────────────────────────
 
+
 class TestStegAnalyzer:
     def test_load_png(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         path = _make_png()
         a = StegAnalyzer(path)
         assert a.width == 64
@@ -57,6 +59,7 @@ class TestStegAnalyzer:
 
     def test_load_jpeg(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         assert a.is_jpeg
@@ -64,11 +67,13 @@ class TestStegAnalyzer:
 
     def test_unsupported_extension(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         with pytest.raises(ValueError, match="Unsupported"):
             StegAnalyzer(Path("/tmp/fake.xyz"))
 
     def test_channel_extraction(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         path = _make_png()
         a = StegAnalyzer(path)
         assert a.channel("r").shape == (64, 64)
@@ -76,6 +81,7 @@ class TestStegAnalyzer:
 
     def test_extract_lsb_bits(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         path = _make_png()
         a = StegAnalyzer(path)
         data = a.extract_lsb_bits(["r", "g", "b"], bit_position=0)
@@ -84,6 +90,7 @@ class TestStegAnalyzer:
 
     def test_file_size(self):
         from steg_analyzer.analyzer import StegAnalyzer
+
         path = _make_png()
         a = StegAnalyzer(path)
         assert a.file_size == path.stat().st_size
@@ -91,35 +98,43 @@ class TestStegAnalyzer:
 
 # ── utils ─────────────────────────────────────────────────────────────────────
 
+
 class TestUtils:
     def test_detect_file_type_jpeg(self):
         from steg_analyzer.utils import detect_file_type
+
         assert detect_file_type(b"\xff\xd8\xff") == "JPEG image"
 
     def test_detect_file_type_png(self):
         from steg_analyzer.utils import detect_file_type
+
         assert detect_file_type(b"\x89PNG\r\n") == "PNG image"
 
     def test_detect_file_type_zip(self):
         from steg_analyzer.utils import detect_file_type
+
         assert detect_file_type(b"PK\x03\x04abc") == "ZIP archive"
 
     def test_detect_file_type_unknown(self):
         from steg_analyzer.utils import detect_file_type
+
         assert detect_file_type(b"\x00\x00\x00\x00") is None
 
     def test_find_flag_patterns(self):
         from steg_analyzer.utils import find_flag_patterns
+
         data = b"nothing here flag{s3cr3t_v4lu3} and more"
         flags = find_flag_patterns(data)
         assert any("flag{s3cr3t_v4lu3}" in f for f in flags)
 
     def test_find_flag_no_match(self):
         from steg_analyzer.utils import find_flag_patterns
+
         assert find_flag_patterns(b"no flags here") == []
 
     def test_extract_printable_strings(self):
         from steg_analyzer.utils import extract_printable_strings
+
         data = b"\x00\x00hello world\x00\x00another string\x00"
         strings = extract_printable_strings(data, min_len=5)
         assert "hello world" in strings
@@ -127,6 +142,7 @@ class TestUtils:
 
     def test_human_size(self):
         from steg_analyzer.utils import human_size
+
         assert "B" in human_size(500)
         assert "KB" in human_size(2048)
         assert "MB" in human_size(2 * 1024 * 1024)
@@ -134,10 +150,12 @@ class TestUtils:
 
 # ── metadata module ───────────────────────────────────────────────────────────
 
+
 class TestMetadata:
     def test_basic_png(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import metadata
+
         path = _make_png()
         a = StegAnalyzer(path)
         result = metadata.run(a)
@@ -148,6 +166,7 @@ class TestMetadata:
     def test_basic_jpeg(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import metadata
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         result = metadata.run(a)
@@ -156,10 +175,12 @@ class TestMetadata:
 
 # ── LSB analysis ──────────────────────────────────────────────────────────────
 
+
 class TestLSBAnalysis:
     def test_runs_clean_image(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import lsb_analysis
+
         path = _make_png()
         a = StegAnalyzer(path)
         result = lsb_analysis.run(a)
@@ -169,21 +190,25 @@ class TestLSBAnalysis:
     def test_detects_flag_in_lsb(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import lsb_analysis
+
         message = b"flag{steg_analyzer_works_perfectly}"
         path = _make_lsb_image(message)
         a = StegAnalyzer(path)
         result = lsb_analysis.run(a)
         flags = result.get("flags", [])
-        assert any("flag{steg_analyzer_works_perfectly}" in f for f in flags), \
-            f"Flag not found in LSB result. flags={flags}"
+        assert any(
+            "flag{steg_analyzer_works_perfectly}" in f for f in flags
+        ), f"Flag not found in LSB result. flags={flags}"
 
 
 # ── ELA module ────────────────────────────────────────────────────────────────
+
 
 class TestELA:
     def test_ela_creates_image(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import ela
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         result = ela.run(a, tmp_path)
@@ -195,6 +220,7 @@ class TestELA:
     def test_ela_returns_stats(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import ela
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         result = ela.run(a, tmp_path)
@@ -205,10 +231,12 @@ class TestELA:
 
 # ── Histogram / chi-square ────────────────────────────────────────────────────
 
+
 class TestHistogram:
     def test_returns_chi2(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import histogram_analysis
+
         path = _make_png()
         a = StegAnalyzer(path)
         result = histogram_analysis.run(a)
@@ -218,6 +246,7 @@ class TestHistogram:
     def test_chi2_values_are_floats(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import histogram_analysis
+
         path = _make_png()
         a = StegAnalyzer(path)
         result = histogram_analysis.run(a)
@@ -228,10 +257,12 @@ class TestHistogram:
 
 # ── Structure analysis ────────────────────────────────────────────────────────
 
+
 class TestStructure:
     def test_no_appended_data(self):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import structure_analysis
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         result = structure_analysis.run(a)
@@ -265,16 +296,17 @@ class TestStructure:
 
         a = StegAnalyzer(test_path)
         result = structure_analysis.run(a)
-        assert any("flag{hidden_in_appended_data}" in f
-                   for f in result.get("flags", []))
+        assert any("flag{hidden_in_appended_data}" in f for f in result.get("flags", []))
 
 
 # ── Bit planes ────────────────────────────────────────────────────────────────
+
 
 class TestBitplanes:
     def test_creates_24_images(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import bitplane_analysis
+
         path = _make_png()
         a = StegAnalyzer(path)
         result = bitplane_analysis.run(a, tmp_path)
@@ -285,9 +317,11 @@ class TestBitplanes:
 
 # ── Reporter ──────────────────────────────────────────────────────────────────
 
+
 class TestReporter:
     def test_json_report(self, tmp_path):
         from steg_analyzer.reporter import Reporter
+
         r = Reporter(tmp_path, fmt="json")
         results = {"metadata": {"file_name": "test.png", "flags": ["flag{test}"]}}
         r.render(results, Path("test.png"))
@@ -297,6 +331,7 @@ class TestReporter:
 
     def test_html_report(self, tmp_path):
         from steg_analyzer.reporter import Reporter
+
         r = Reporter(tmp_path, fmt="html")
         results = {"metadata": {"file_name": "test.png"}}
         r.render(results, Path("test.png"))
@@ -307,10 +342,12 @@ class TestReporter:
 
 # ── LSB extractor ─────────────────────────────────────────────────────────────
 
+
 class TestLSBExtractor:
     def test_extracts_bytes(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import lsb_extractor
+
         path = _make_png()
         a = StegAnalyzer(path)
         out = tmp_path / "out.bin"
@@ -322,6 +359,7 @@ class TestLSBExtractor:
     def test_recovers_embedded_message(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import lsb_extractor
+
         message = b"flag{recovered}"
         path = _make_lsb_image(message, width=256, height=256)
         a = StegAnalyzer(path)
@@ -333,10 +371,12 @@ class TestLSBExtractor:
 
 # ── Visual generator ──────────────────────────────────────────────────────────
 
+
 class TestVisualGenerator:
     def test_ela_output(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import visual_generator
+
         path = _make_jpeg()
         a = StegAnalyzer(path)
         visual_generator.run(a, tmp_path, ela=True)
@@ -345,6 +385,7 @@ class TestVisualGenerator:
     def test_fft_output(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import visual_generator
+
         path = _make_png()
         a = StegAnalyzer(path)
         visual_generator.run(a, tmp_path, fft=True)
@@ -353,6 +394,7 @@ class TestVisualGenerator:
     def test_diff_output(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import visual_generator
+
         path = _make_png()
         a = StegAnalyzer(path)
         visual_generator.run(a, tmp_path, diff=True)
@@ -363,6 +405,7 @@ class TestVisualGenerator:
     def test_channels_output(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import visual_generator
+
         path = _make_png()
         a = StegAnalyzer(path)
         visual_generator.run(a, tmp_path, channels=True)
@@ -374,6 +417,7 @@ class TestVisualGenerator:
     def test_bitplanes_output(self, tmp_path):
         from steg_analyzer.analyzer import StegAnalyzer
         from steg_analyzer.modules import visual_generator
+
         path = _make_png()
         a = StegAnalyzer(path)
         visual_generator.run(a, tmp_path, bitplanes=True)

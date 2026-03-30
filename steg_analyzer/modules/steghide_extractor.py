@@ -19,10 +19,14 @@ def extract(
     try:
         result = subprocess.run(
             [
-                "steghide", "extract",
-                "-sf", str(analyzer.path),
-                "-p", password,
-                "-xf", str(output_path),
+                "steghide",
+                "extract",
+                "-sf",
+                str(analyzer.path),
+                "-p",
+                password,
+                "-xf",
+                str(output_path),
                 "-f",
             ],
             capture_output=True,
