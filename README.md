@@ -6,8 +6,9 @@
 [![PyPI](https://img.shields.io/pypi/v/steg-analyzer?color=blue)](https://pypi.org/project/steg-analyzer/)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://pypi.org/project/steg-analyzer/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Web App](https://img.shields.io/badge/Web%20UI-Flask-teal)](webapp/)
 
-Steg Analyzer is a comprehensive steganography toolkit for CTF challenges, digital forensics, and security research. It bundles every major analysis technique into a single, clean CLI.
+Steg Analyzer is a comprehensive steganography toolkit for CTF challenges, digital forensics, and security research. It bundles every major analysis technique into a single, clean CLI — and now also ships a **web interface** so you can drag-and-drop any image and get full results in your browser.
 
 ---
 
@@ -26,6 +27,7 @@ Steg Analyzer is a comprehensive steganography toolkit for CTF challenges, digit
 | **Visual** | FFT spectrum, channel XOR/diff, colour channel separation |
 | **Extract** | LSB, Steghide, DCT extraction with one command |
 | **Crack** | Multi-threaded steghide brute-force + stegseek support |
+| **🌐 Web App** | Drag-and-drop browser UI — upload & analyse without a CLI |
 
 ---
 
@@ -41,7 +43,7 @@ pip install "steg-analyzer[full]"
 
 ### From source
 ```bash
-git clone https://github.com/your-org/steg-analyzer.git
+git clone https://github.com/kavi-ya/steg-analyzer.git
 cd steg_analyzer
 pip install -e ".[full]"
 ```
@@ -54,6 +56,40 @@ sudo apt install steghide stegseek exiftool zbar-tools
 # macOS
 brew install steghide exiftool zbar
 ```
+
+---
+
+## 🌐 Web App
+
+A lightweight Flask web interface lets you upload any image and view the full analysis report — including an inline ELA visualisation — right in your browser.
+
+### Setup
+
+```bash
+# Install web dependencies (Flask is the only addition)
+pip install flask flask-cors
+
+# Or install everything at once from the repo root
+pip install -e ".[full]"
+pip install flask flask-cors
+```
+
+### Run
+
+```bash
+# From the repo root
+python webapp/app.py
+```
+
+Then open **http://localhost:5050** in your browser.
+
+### Features
+- 🖼️ Drag-and-drop or click to upload (PNG, JPG, BMP, GIF, TIFF, WEBP — up to 32 MB)
+- 📊 Side-by-side original image + ELA heatmap
+- 🚩 Auto-highlighted flags / secrets found anywhere in the analysis
+- 📋 Metadata, LSB, Chi-square, Structure, Strings — all at once
+- 🟢 / 🟡 / 🔴 Overall suspicion verdict
+- No data is stored — images are analysed in memory and deleted immediately
 
 ---
 
@@ -200,7 +236,7 @@ pytest tests/ -v -k "TestLSBAnalysis"
 ## 🗂️ Project Structure
 
 ```
-steg_analyzer/
+steg-analyzer/
 ├── steg_analyzer/
 │   ├── __init__.py              # Version info
 │   ├── cli.py                   # CLI entry point (argparse)
@@ -221,12 +257,16 @@ steg_analyzer/
 │       ├── dct_extractor.py     # JSteg DCT extractor
 │       ├── cracker.py           # Multi-threaded password cracker
 │       └── visual_generator.py  # Visual analysis image generator
+├── webapp/                      # 🌐 Web interface
+│   ├── app.py                   # Flask server (REST API + template serving)
+│   └── templates/
+│       └── index.html           # Single-page drag-and-drop UI
 ├── tests/
-│   └── test_steg_analyzer.py            # Full test suite (pytest)
-├── .github/workflows/ci.yml     # GitHub Actions CI + PyPI publish
-├── pyproject.toml               # Modern packaging config
-├── requirements.txt             # Runtime dependencies
-├── LICENSE                      # MIT
+│   └── test_steg_analyzer.py   # Full test suite (pytest)
+├── .github/workflows/ci.yml    # GitHub Actions CI + PyPI publish
+├── pyproject.toml              # Modern packaging config
+├── requirements.txt            # Runtime dependencies
+├── LICENSE                     # MIT
 └── README.md
 ```
 
