@@ -3,10 +3,13 @@ Steg Analyzer – DCT (JSteg) data extractor.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
+
 import numpy as np
+
 from ..analyzer import StegAnalyzer
-from ..utils import print_result, print_warning, detect_file_type
+from ..utils import detect_file_type, print_result, print_warning
 
 
 def extract(analyzer: StegAnalyzer, output_path: Path = Path("extracted_dct.bin")) -> bytes | None:

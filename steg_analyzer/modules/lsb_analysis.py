@@ -4,10 +4,11 @@ Checks all channel / bit-plane / bit-order combinations for hidden data.
 """
 
 from __future__ import annotations
-import re
+
 import numpy as np
+
 from ..analyzer import StegAnalyzer
-from ..utils import detect_file_type, find_flag_patterns, extract_printable_strings
+from ..utils import detect_file_type, extract_printable_strings, find_flag_patterns
 
 CHANNEL_COMBOS = [
     (["r"], "R"),

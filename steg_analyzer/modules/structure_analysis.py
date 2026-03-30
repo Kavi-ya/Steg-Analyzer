@@ -4,7 +4,9 @@ Searches for appended data, embedded file signatures, and unusual markers.
 """
 
 from __future__ import annotations
+
 import re
+
 from ..analyzer import StegAnalyzer
 from ..utils import FILE_SIGNATURES, detect_file_type, find_flag_patterns
 

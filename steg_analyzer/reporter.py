@@ -3,9 +3,10 @@ Steg Analyzer - Report renderer (text / JSON / HTML).
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
-from .utils import print_section, print_result, print_found, print_warning
+from pathlib import Path
+
+from .utils import print_found, print_result, print_section
 
 
 class Reporter:
@@ -80,6 +81,7 @@ class Reporter:
                     )
                     rows += f"<tr{css}><td>{k}</td><td>{val_html}</td></tr>\n"
 
+        generated = datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')
         html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,7 +100,7 @@ class Reporter:
 </head>
 <body>
 <h1>🔍 Steg Analyzer Report</h1>
-<h2>File: {image_path.name} &nbsp;|&nbsp; Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}</h2>
+<h2>File: {image_path.name} &nbsp;|&nbsp; Generated: {generated}</h2>
 <table>
 {rows}
 </table>

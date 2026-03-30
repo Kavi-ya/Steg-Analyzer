@@ -4,9 +4,12 @@ Saves one PNG per bit per channel (24 images total for RGB).
 """
 
 from __future__ import annotations
+
 from pathlib import Path
+
 import numpy as np
 from PIL import Image
+
 from ..analyzer import StegAnalyzer
 
 

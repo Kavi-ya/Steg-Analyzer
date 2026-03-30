@@ -3,9 +3,9 @@ Steg Analyzer – Metadata / EXIF extraction module.
 """
 
 from __future__ import annotations
-from pathlib import Path
+
 from ..analyzer import StegAnalyzer
-from ..utils import human_size, detect_file_type, find_flag_patterns
+from ..utils import find_flag_patterns, human_size
 
 
 def run(analyzer: StegAnalyzer) -> dict:

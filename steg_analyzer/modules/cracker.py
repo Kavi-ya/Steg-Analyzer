@@ -3,10 +3,12 @@ Steg Analyzer – Steghide passphrase brute-forcer with multi-threading.
 """
 
 from __future__ import annotations
+
 import subprocess
 import threading
 from pathlib import Path
-from queue import Queue, Empty
+from queue import Empty, Queue
+
 from ..utils import print_info, print_result
 
 

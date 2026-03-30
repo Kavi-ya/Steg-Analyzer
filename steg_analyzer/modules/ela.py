@@ -5,10 +5,13 @@ indicating possible manipulation or hidden data insertion.
 """
 
 from __future__ import annotations
+
 import io
 from pathlib import Path
+
 import numpy as np
 from PIL import Image
+
 from ..analyzer import StegAnalyzer
 
 

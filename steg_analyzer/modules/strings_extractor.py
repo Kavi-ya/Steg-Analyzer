@@ -4,6 +4,7 @@ Finds human-readable strings and CTF flag patterns in raw image bytes.
 """
 
 from __future__ import annotations
+
 from ..analyzer import StegAnalyzer
 from ..utils import extract_printable_strings, find_flag_patterns
 

@@ -5,13 +5,12 @@ Steg Analyzer - All-in-One Steganography Analysis Tool
 
 import argparse
 import sys
-import os
 from pathlib import Path
 
 from . import __version__
 from .analyzer import StegAnalyzer
 from .reporter import Reporter
-from .utils import print_banner, print_success, print_error, print_info, print_warning
+from .utils import print_banner, print_error, print_info, print_success, print_warning
 
 
 def build_parser():
@@ -49,7 +48,9 @@ Examples:
     analyze.add_argument("--dct", action="store_true", help="DCT coefficient analysis (JPEG)")
     analyze.add_argument("--bitplanes", action="store_true", help="Bit-plane visualization")
     analyze.add_argument("--structure", action="store_true", help="File structure analysis")
-    analyze.add_argument("--output", "-o", default="./steg-analyzer-output", help="Output directory")
+    analyze.add_argument(
+        "--output", "-o", default="./steg-analyzer-output", help="Output directory"
+    )
     analyze.add_argument("--format", choices=["text", "json", "html"], default="text",
                          help="Report format")
 
@@ -119,9 +120,16 @@ def main():
 
 
 def run_analyze(args):
-    from .modules import (metadata, lsb_analysis, ela, histogram_analysis,
-                           strings_extractor, dct_analysis, bitplane_analysis,
-                           structure_analysis)
+    from .modules import (
+        bitplane_analysis,
+        dct_analysis,
+        ela,
+        histogram_analysis,
+        lsb_analysis,
+        metadata,
+        strings_extractor,
+        structure_analysis,
+    )
 
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -178,7 +186,7 @@ def run_analyze(args):
 
 
 def run_extract(args):
-    from .modules import lsb_extractor, steghide_extractor, dct_extractor
+    from .modules import dct_extractor, lsb_extractor, steghide_extractor
 
     image_path = Path(args.image)
     analyzer = StegAnalyzer(image_path, verbose=args.verbose)

@@ -3,8 +3,10 @@ Steg Analyzer – Steghide extraction wrapper.
 """
 
 from __future__ import annotations
+
 import subprocess
 from pathlib import Path
+
 from ..analyzer import StegAnalyzer
 from ..utils import print_result, print_warning
 

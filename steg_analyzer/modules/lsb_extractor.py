@@ -3,9 +3,11 @@ Steg Analyzer – LSB data extractor.
 """
 
 from __future__ import annotations
+
 from pathlib import Path
+
 from ..analyzer import StegAnalyzer
-from ..utils import print_result, detect_file_type
+from ..utils import detect_file_type, print_result
 
 CHANNEL_MAP = {
     "r": ["r"], "g": ["g"], "b": ["b"], "a": ["a"],

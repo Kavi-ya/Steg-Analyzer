@@ -4,10 +4,13 @@ Produces: bit-planes, channel separations, ELA, FFT spectrum, channel diffs.
 """
 
 from __future__ import annotations
-from pathlib import Path
+
 import io
+from pathlib import Path
+
 import numpy as np
-from PIL import Image, ImageOps
+from PIL import Image
+
 from ..analyzer import StegAnalyzer
 from ..utils import print_result
 

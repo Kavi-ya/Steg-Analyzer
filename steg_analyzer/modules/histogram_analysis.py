@@ -4,7 +4,9 @@ A chi-square value near 1.0 per pair suggests LSB embedding.
 """
 
 from __future__ import annotations
+
 import numpy as np
+
 from ..analyzer import StegAnalyzer
 
 

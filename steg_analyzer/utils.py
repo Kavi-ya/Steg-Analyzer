@@ -2,10 +2,8 @@
 Steg Analyzer - Utility helpers and terminal output.
 """
 
-import sys
 import re
-from pathlib import Path
-
+import sys
 
 # ── ANSI colour helpers ───────────────────────────────────────────────────────
 
